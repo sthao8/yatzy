@@ -14,7 +14,12 @@ class Rules:
         }
 
         self.categories = [
-            "bonus",
+            "ones",
+            "twos",
+            "threes",
+            "fours",
+            "fives",
+            "sixes",
             "par",
             "two pairs",
             "triples",
@@ -24,21 +29,10 @@ class Rules:
             "big ladder",
             "chance",
             "yatzy"]
-        
-        self.n_of_a_kind_values = {
-            "two pairs": 2,
-            "triples": 3,
-            "four-of-a-kind": 4 
-        }
-        
-    def _get_number_of_dice_with_value(self, value: int, dice: dict[int, Die]):
-        dice_counter = self._count_values(dice)
-        return dice_counter[value]
-    
-    def _get_highest_dice_multiple(self, multiple: int, dice_counter: Counter) -> dict[int, int]:
-        multiples = {value: counter for value, counter in dice_counter.items() if counter >= multiple}
-        max_value, counter = max(multiples.items(), key=lambda x: x[1])
-        return max_value, counter
+
+    # def print_scores(self, dice: dict):
+    #     for category in self.categories:
+    #         self.
 
     def singles(self, singles_category: str, dice: dict[int, Die]) -> int:
         if singles_category not in [name for name in self.category_values.keys()]: raise ValueError("Invalid Category Value")
@@ -58,10 +52,13 @@ class Rules:
     def fourple(self, dice:dict): 
         return self._n_of_a_kind(dice, 4)
     
-    def _n_of_a_kind(self, dice:dict, n: int) -> int:
-        dice_counter = self._count_values(dice)
-        value, counter = self._get_highest_dice_multiple(n, dice_counter)
-        return value * counter
+    def chance(self, dice: dict):
+        values = self._count_values(dice)
+        return 30 if 6 in values else 0
+    
+    def yatzy(self, dice: dict):
+        values = self._count_values(dice)
+        return 50 if len(values) == 1 else 0
 
     def full_house(self, dice: dict):
         dice_counter = self._count_values(dice)
@@ -83,10 +80,25 @@ class Rules:
     def large_ladder(self, dice):
         values = self._get_dice_values(dice)
         return 20 if {2,3,4,5,6}.issubset(values) else 0
-
-    def _get_dice_values(self, dice):
+    
+    def _get_number_of_dice_with_value(self, value: int, dice: dict[int, Die]):
+        dice_counter = self._count_values(dice)
+        return dice_counter[value]
+    
+    def _get_highest_dice_multiple(self, multiple: int, dice_counter: Counter) -> dict[int, int]:
+        multiples = {value: counter for value, counter in dice_counter.items() if counter >= multiple}
+        max_value, counter = max(multiples.items(), key=lambda x: x[1])
+        return max_value, counter
+    
+    def _n_of_a_kind(self, dice:dict, n: int) -> int:
+        dice_counter = self._count_values(dice)
+        value, counter = self._get_highest_dice_multiple(n, dice_counter)
+        return value * counter
+    
+    def _get_dice_values(self, dice) -> set:
         return {die.value for die in dice.values()}
     
     def _count_values(self, dice: dict):
         return Counter([dice.value for dice in dice.values()])
     
+# ordered dict, or dict, list

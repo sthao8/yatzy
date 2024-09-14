@@ -1,11 +1,15 @@
 from player import Die, Player
+from rules import Rules
 
 def main():
+    rules = Rules()
     player = Player()
     player.roll_die()
 
     player.print_dice_values()
-    one_player_turn(player)
+    for _ in rules.categories:
+        dice = one_player_turn(player)
+        category = input("Choose which category to record to: ")
 
 def one_player_turn(player: Player):
     for turn_no in range(2):
@@ -36,6 +40,8 @@ def one_player_turn(player: Player):
                 continue
         
         player.print_dice_values()
+    return player.dice
+        
 
 
 if __name__ == "__main__":

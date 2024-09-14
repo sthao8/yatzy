@@ -148,6 +148,31 @@ class TestRules(unittest.TestCase):
             20
         )
 
+    def test_13_chance_returns_30(self):
+        dice = {
+            "name": Die("name", value=6),
+            "name2": Die("name2", value=6),
+            "name3": Die("name3", value=6),
+            "name4": Die("name4", value=6),
+            "name5": Die("name5", value=6)
+        }
+        self.assertEqual(
+            self.rules.chance(dice),
+            30
+        )
+
+    def test_14_yatzy_returns_50(self):
+        dice = {
+            "name": Die("name", value=6),
+            "name2": Die("name2", value=6),
+            "name3": Die("name3", value=6),
+            "name4": Die("name4", value=6),
+            "name5": Die("name5", value=6)
+        }
+        self.assertEqual(
+            self.rules.yatzy(dice),
+            50
+        )
 
 
 if __name__ == '__main__':
